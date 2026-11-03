@@ -131,7 +131,7 @@ footer{text-align:center;margin-top:40px;color:var(--text-faint);font-size:10px;
 <div class="ios" id="iosGuide">
   <div class="ios-box">
     <h3>Shto Orarin në ekran</h3>
-    <div class="ios-warn" id="iosWarn" style="display:none">Fillimisht hape faqen në <b>Safari</b> (busulla blu). Kopjo linkun, hap Safari dhe ngjite.<button type="button" id="iosCopy">Kopjo linkun</button></div>
+    <div class="ios-warn" id="iosWarn" style="display:none">Fillimisht hape faqen në <b>Safari</b> (busulla blu).<button type="button" id="iosSafari">Hape në Safari</button><div style="margin-top:8px;font-size:13px">Nëse nuk hapet, kopjo linkun, hap Safari dhe ngjite:</div><button type="button" id="iosCopy" style="background:transparent;border:1px solid var(--gold);color:var(--gold)">Kopjo linkun</button></div>
     <div class="ios-step"><div class="ios-n">1</div><div>Shtyp <b>Share</b> ose <b>&#8943;</b> në shiritin poshtë</div><div class="big" style="margin-left:auto">&#11014;&#65039;</div></div>
     <div class="ios-step"><div class="ios-n">2</div><div>Zhvendos listën lart dhe shtyp <b>Add to Home Screen</b></div><div class="big" style="margin-left:auto">+</div></div>
     <div class="ios-step"><div class="ios-n">3</div><div>Shtyp <b>Add</b> (lart djathtas)</div></div>
@@ -161,6 +161,9 @@ footer{text-align:center;margin-top:40px;color:var(--text-faint);font-size:10px;
   var g=document.getElementById('iosGuide');
   document.getElementById('iosClose').addEventListener('click',function(){g.classList.remove('show')});
   g.addEventListener('click',function(e){if(e.target===g)g.classList.remove('show')});
+  document.getElementById('iosSafari').addEventListener('click',function(){
+    location.href='x-safari-'+location.href;
+  });
   document.getElementById('iosCopy').addEventListener('click',function(){
     var t=this;
     function ok(){t.textContent='U kopjua ✓'}
