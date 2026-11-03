@@ -141,7 +141,13 @@ footer{text-align:center;margin-top:40px;color:var(--text-faint);font-size:10px;
       return;
     }
     if(isIOS){
-      hint.innerHTML='Hape linkun në <b>Safari</b>, shtyp <b>Share</b> (&#11014;&#65039;), pastaj <b>Add to Home Screen</b>.';
+      var svg='<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#0a84ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M12 15V3"/><path d="M8 7l4-4 4 4"/><path d="M6 11H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-1"/></svg>';
+      hint.innerHTML='Zgjidh <b>Shto në Ekranin Kryesor</b><br><span style="font-size:12px">(Add to Home Screen)</span><br>në menunë që hapet.';
+      if(navigator.share){
+        navigator.share({title:document.title,url:location.href}).catch(function(){});
+      }else{
+        hint.innerHTML='Shtyp ikonën '+svg+' <b>Share</b> në fund të Safari, pastaj <b>Add to Home Screen</b>.<br><span style="font-size:12px">Nëse je në WhatsApp, hape linkun në Safari (busulla poshtë djathtas).</span>';
+      }
     }else if(isAndroid){
       hint.innerHTML='Instalimi nuk punon brenda WhatsApp. Hape orarin në <b>Chrome</b> dhe shtyp përsëri butonin e instalimit.'+
         '<a class="chrome" href="'+chromeIntent()+'">Hap në Chrome &rarr;</a>';

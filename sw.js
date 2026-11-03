@@ -1,4 +1,4 @@
-const CACHE = 'orari-v3';
+const CACHE = 'orari-v4';
 const CORE = ['./', './index.html', './orari_dita.html', './orari_kp.html', './stema.jpg', './icon-192.png', './icon-512.png', './manifest.webmanifest'];
 
 self.addEventListener('install', e => {
