@@ -1,5 +1,5 @@
-const CACHE = 'orari-v1';
-const CORE = ['./', './index.html', './orari_dita.html', './orari_kp.html', './stema.jpg', './manifest.webmanifest'];
+const CACHE = 'orari-v2';
+const CORE = ['./', './index.html', './orari_dita.html', './orari_kp.html', './stema.jpg', './icon-192.png', './icon-512.png', './manifest.webmanifest'];
 
 self.addEventListener('install', e => {
   e.waitUntil(

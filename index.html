@@ -20,7 +20,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Orari">
 <link rel="icon" type="image/jpeg" href="stema.jpg">
-<link rel="apple-touch-icon" href="stema.jpg">
+<link rel="apple-touch-icon" href="icon-192.png">
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -123,31 +123,21 @@ footer{text-align:center;margin-top:40px;color:var(--text-faint);font-size:10px;
   var standalone=window.matchMedia('(display-mode: standalone)').matches||navigator.standalone;
   if(standalone)return;
   var deferred=null;
-  var ua=navigator.userAgent;
-  var isIOS=/iPhone|iPad|iPod/.test(ua);
-  window.addEventListener('beforeinstallprompt',function(e){
-    e.preventDefault();deferred=e;btn.classList.add('show');
-  });
-  btn.addEventListener('click',function(){
-    if(!deferred)return;
-    deferred.prompt();
-    deferred.userChoice.then(function(){deferred=null;btn.classList.remove('show')});
-  });
+  var isIOS=/iPhone|iPad|iPod/.test(navigator.userAgent);
+  btn.classList.add('show');
+  window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();deferred=e;});
   window.addEventListener('appinstalled',function(){btn.classList.remove('show');hint.classList.remove('show')});
-  if(isIOS){
-    btn.classList.add('show');
-    btn.addEventListener('click',function(){
-      hint.innerHTML='Shtyp butonin <b>Share</b> (&#11014;&#65039;) në Safari, pastaj <b>Add to Home Screen</b>.';
-      hint.classList.add('show');
-    });
-  }else{
-    setTimeout(function(){
-      if(!deferred){
-        hint.innerHTML='Për ta instaluar: hap menynë <b>&#8942;</b> të shfletuesit dhe zgjidh <b>Shto në ekranin kryesor</b> / <b>Instalo aplikacionin</b>.';
-        hint.classList.add('show');
-      }
-    },3000);
-  }
+  btn.addEventListener('click',function(){
+    if(deferred){
+      deferred.prompt();
+      deferred.userChoice.then(function(){deferred=null});
+      return;
+    }
+    hint.innerHTML=isIOS
+      ?'Shtyp butonin <b>Share</b> (&#11014;&#65039;) në Safari, pastaj <b>Add to Home Screen</b>.'
+      :'Hap menynë <b>&#8942;</b> të shfletuesit dhe zgjidh <b>Instalo aplikacionin</b> ose <b>Shto në ekranin kryesor</b>.';
+    hint.classList.add('show');
+  });
 })();
 </script>
 </body>
