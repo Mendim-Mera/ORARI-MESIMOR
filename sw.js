@@ -24,7 +24,7 @@ self.addEventListener('fetch', e => {
   const url = new URL(req.url);
   if (url.origin !== location.origin) return;
   e.respondWith(
-    fetch(req)
+    fetch(req.url, {cache: 'no-cache'})
       .then(res => {
         const copy = res.clone();
         caches.open(CACHE).then(c => c.put(req, copy));
