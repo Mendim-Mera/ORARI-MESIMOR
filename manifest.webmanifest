@@ -1,0 +1,15 @@
+{
+  "name": "Orari Mësimor · Gjimnazi Said Najdeni",
+  "short_name": "Orari",
+  "description": "Orari mësimor 2026–2027 · Gjimnazi \"Said Najdeni\", Peshkopi",
+  "lang": "sq",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0c0e14",
+  "theme_color": "#0c0e14",
+  "icons": [
+    { "src": "stema.jpg", "sizes": "192x192 512x512", "type": "image/jpeg", "purpose": "any" }
+  ]
+}
