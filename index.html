@@ -62,6 +62,19 @@ h1{font-size:clamp(26px,6vw,40px);font-weight:800;letter-spacing:-.5px;margin-bo
 .hint{display:none;margin-top:12px;padding:12px 14px;border-radius:12px;background:var(--surface);border:1px solid var(--border);color:var(--text-dim);font-size:13px;line-height:1.5;text-align:center}
 .hint.show{display:block}
 .hint a.chrome{display:block;margin-top:10px;padding:11px 14px;border-radius:12px;background:var(--gold);color:#1a1300;font-weight:700;font-size:14px;text-decoration:none}
+.ios{display:none;position:fixed;inset:0;z-index:50;background:rgba(5,6,10,.88);align-items:flex-end;justify-content:center;padding:16px 16px 0}
+.ios.show{display:flex}
+.ios-box{position:relative;width:100%;max-width:420px;background:var(--surface);border:1px solid var(--gold-glow);border-radius:22px 22px 0 0;padding:20px 18px 74px;max-height:92vh;overflow:auto}
+.ios h3{font-size:18px;text-align:center;margin-bottom:14px}
+.ios-step{display:flex;align-items:center;gap:14px;padding:12px;margin-bottom:10px;background:var(--surface2);border-radius:14px;font-size:15px;line-height:1.35}
+.ios-n{flex:0 0 30px;height:30px;border-radius:50%;background:var(--gold);color:#1a1300;font-weight:800;display:flex;align-items:center;justify-content:center}
+.ios-step .big{flex:0 0 46px;height:46px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;font-size:24px;color:#0a84ff;font-weight:800}
+.ios-close{display:block;width:100%;margin-top:6px;padding:12px;border:0;border-radius:12px;background:var(--gold);color:#1a1300;font-family:inherit;font-weight:700;font-size:15px}
+.ios-arrow{position:absolute;left:0;right:0;bottom:8px;text-align:center;color:var(--gold);font-size:40px;line-height:1;animation:bob 1s ease-in-out infinite}
+.ios-arrow small{display:block;font-size:12px;font-weight:600}
+.ios-warn{background:rgba(240,180,41,.14);border:1px solid var(--gold-glow);border-radius:14px;padding:12px;margin-bottom:12px;font-size:14px;line-height:1.4}
+.ios-warn button{margin-top:8px;width:100%;padding:10px;border:0;border-radius:10px;background:var(--gold);color:#1a1300;font-family:inherit;font-weight:700;font-size:14px}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(8px)}}
 footer{text-align:center;margin-top:40px;color:var(--text-faint);font-size:10px;font-family:'JetBrains Mono',monospace;letter-spacing:1.5px;opacity:.6}
 @keyframes fadeDown{from{opacity:0;transform:translateY(-12px)}to{opacity:1;transform:none}}
 @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
@@ -115,6 +128,17 @@ footer{text-align:center;margin-top:40px;color:var(--text-faint);font-size:10px;
   <div class="hint" id="installHint"></div>
   <footer>&#9670; ORARI MËSIMOR 2026–2027 &#9670;</footer>
 </div>
+<div class="ios" id="iosGuide">
+  <div class="ios-box">
+    <h3>Shto Orarin në ekran</h3>
+    <div class="ios-warn" id="iosWarn" style="display:none">Fillimisht hape faqen në <b>Safari</b> (busulla blu). Kopjo linkun, hap Safari dhe ngjite.<button type="button" id="iosCopy">Kopjo linkun</button></div>
+    <div class="ios-step"><div class="ios-n">1</div><div>Shtyp <b>Share</b> ose <b>&#8943;</b> në shiritin poshtë</div><div class="big" style="margin-left:auto">&#11014;&#65039;</div></div>
+    <div class="ios-step"><div class="ios-n">2</div><div>Zhvendos listën lart dhe shtyp <b>Add to Home Screen</b></div><div class="big" style="margin-left:auto">+</div></div>
+    <div class="ios-step"><div class="ios-n">3</div><div>Shtyp <b>Add</b> (lart djathtas)</div></div>
+    <button class="ios-close" type="button" id="iosClose">E kuptova</button>
+    <div class="ios-arrow">&#9660;<small>Share është poshtë këtu</small></div>
+  </div>
+</div>
 <script>
 (function(){
   if('serviceWorker' in navigator){
@@ -134,6 +158,14 @@ footer{text-align:center;margin-top:40px;color:var(--text-faint);font-size:10px;
     var u=location.host+location.pathname+location.search;
     return 'intent://'+u+'#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url='+encodeURIComponent(location.href)+';end';
   }
+  var g=document.getElementById('iosGuide');
+  document.getElementById('iosClose').addEventListener('click',function(){g.classList.remove('show')});
+  g.addEventListener('click',function(e){if(e.target===g)g.classList.remove('show')});
+  document.getElementById('iosCopy').addEventListener('click',function(){
+    var t=this;
+    function ok(){t.textContent='U kopjua ✓'}
+    if(navigator.clipboard){navigator.clipboard.writeText(location.href).then(ok,ok)}else{ok()}
+  });
   btn.addEventListener('click',function(){
     if(deferred){
       deferred.prompt();
@@ -141,13 +173,10 @@ footer{text-align:center;margin-top:40px;color:var(--text-faint);font-size:10px;
       return;
     }
     if(isIOS){
-      var svg='<svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#0a84ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle"><path d="M12 15V3"/><path d="M8 7l4-4 4 4"/><path d="M6 11H5a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-6a2 2 0 0 0-2-2h-1"/></svg>';
-      hint.innerHTML='Zgjidh <b>Shto në Ekranin Kryesor</b><br><span style="font-size:12px">(Add to Home Screen)</span><br>në menunë që hapet.';
-      if(navigator.share){
-        navigator.share({title:document.title,url:location.href}).catch(function(){});
-      }else{
-        hint.innerHTML='Shtyp ikonën '+svg+' <b>Share</b> në fund të Safari, pastaj <b>Add to Home Screen</b>.<br><span style="font-size:12px">Nëse je në WhatsApp, hape linkun në Safari (busulla poshtë djathtas).</span>';
-      }
+      var notSafari=/CriOS|FxiOS|EdgiOS|FBAN|FBAV|Instagram|Line\/|GSA/.test(ua)||!/Safari/.test(ua);
+      document.getElementById('iosWarn').style.display=notSafari?'block':'none';
+      document.getElementById('iosGuide').classList.add('show');
+      return;
     }else if(isAndroid){
       hint.innerHTML='Instalimi nuk punon brenda WhatsApp. Hape orarin në <b>Chrome</b> dhe shtyp përsëri butonin e instalimit.'+
         '<a class="chrome" href="'+chromeIntent()+'">Hap në Chrome &rarr;</a>';
