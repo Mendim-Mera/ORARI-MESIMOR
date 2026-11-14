@@ -85,6 +85,15 @@
     });
     var s=document.createElement('script');s.src='https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js';s.defer=true;document.head.appendChild(s);
   }
+  /* 3. Rrethi i kuq në ikonë: vendoset nga sw.js kur vjen njoftim; pastrohet sa hapet aplikacioni */
+  function clearBadge(){
+    try{if(navigator.clearAppBadge)navigator.clearAppBadge();else if(navigator.setAppBadge)navigator.setAppBadge(0);}catch(e){}
+    try{if(window.caches)caches.open('orari-badge').then(function(c){return c.delete(new URL('__badge',location.href).href);}).catch(function(){});}catch(e){}
+  }
+  clearBadge();
+  document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible')clearBadge();});
+  window.addEventListener('pageshow',clearBadge);
+  window.addEventListener('focus',clearBadge);
   function ready(f){if(document.readyState!=='loading')f();else document.addEventListener('DOMContentLoaded',f);}
   ready(function(){checkUpdate();initPush();});
 })();
