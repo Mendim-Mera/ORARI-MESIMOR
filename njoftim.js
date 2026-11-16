@@ -91,7 +91,13 @@
       var denied=Notification.permission==='denied';
       var on=false;
       if(OSref){try{on=!!OSref.User.PushSubscription.optedIn;}catch(e){}}
-      else if(Notification.permission==='granted'&&wasOn)on=true;   // para ngarkimit të SDK-së: besoje gjendjen e ruajtur
+      else if(Notification.permission==='granted'){
+        /* leja është e dhënë por OneSignal s'ka përfunduar ende (p.sh. pas fshirjes së historikut):
+           mos shfaq banerën, prit përgjigjen e SDK-së, pa e ndryshuar gjendjen e ruajtur */
+        box.className='njb';
+        if(wasOn)ok.className='njdone show';
+        return;
+      }
       show(on,denied);
     }
     refresh();    // BANERA SHFAQET MENJËHERË, pa pritur OneSignal
