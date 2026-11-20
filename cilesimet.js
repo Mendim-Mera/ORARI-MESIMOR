@@ -6,7 +6,7 @@
 window.ORARI_CILESIMET = {
   "viti": "2026–2027",
   "mbyllur": false,
-  "grafiku": true,
+  "grafiku": false,
   "titulli": "",
   "mesazhi": "",
   "onesignal": "b8419706-f4ab-42a9-94db-bfc70d70442b"
