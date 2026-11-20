@@ -1,0 +1,29 @@
+name: Njofto kur ndryshon orari
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'orari_dita.html'
+      - 'orari_kp.html'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  njofto:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Dërgo njoftimin me OneSignal
+        env:
+          ONESIGNAL_API_KEY: ${{ secrets.ONESIGNAL_API_KEY }}
+          ORARI_LINK: https://mendim-mera.github.io/ORARI-MESIMOR/
+        run: |
+          # App ID merret nga cilesimet.js, që të jetë gjithmonë i njëjti me atë ku regjistrohen telefonat
+          export ONESIGNAL_APP_ID="$(grep -o '"onesignal"[^"]*"[^"]*"' cilesimet.js | sed 's/.*: *"//; s/"$//')"
+          echo "OneSignal App ID: $ONESIGNAL_APP_ID"
+          bash .github/njofto.sh "${{ github.event.before }}" "${{ github.sha }}"
