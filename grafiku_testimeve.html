@@ -307,8 +307,9 @@ wire($('cjpg'),$('cshr'),function(){
 /* ---- Mësuesi ---- */
 function norm(s){return String(s).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();}
 function tkey(n){return norm(n).replace(/\s+/g,' ').trim();}
-function sortKey(n){var w=tkey(n).split(' ');return w[w.length-1]+' '+w.slice(0,-1).join(' ');}
-function disp(n){var w=nice(n.replace(/\s+/g,' ').trim()).split(' ');return w.length>1?w[w.length-1]+' '+w.slice(0,-1).join(' '):w[0];}
+var SRC_MBIEMER_FIRST=false; /* false = në orar emrat janë 'Emër Mbiemër'; vëre true nëse janë 'Mbiemër Emër' */
+function sortKey(n){var w=tkey(n).split(' ');if(SRC_MBIEMER_FIRST&&w.length>1)w=w.slice(1).concat(w[0]);return w.join(' ');} /* renditja sipas emrit, pastaj mbiemrit */
+function disp(n){var w=n.replace(/\s+/g,' ').trim().split(' ');if(SRC_MBIEMER_FIRST&&w.length>1)w=w.slice(1).concat(w[0]);return nice(w.join(' '));}
 var teachers=[],tseen={};
 DATA.tests.forEach(function(t){(t.t||[]).forEach(function(n){var k=tkey(n);if(k&&!tseen[k]){tseen[k]=1;teachers.push(n.replace(/\s+/g,' ').trim());}});});
 teachers.sort(function(a,b){var x=sortKey(a),y=sortKey(b);return x<y?-1:x>y?1:0;});
@@ -340,7 +341,7 @@ function drawTeacher(){
 }
 wire($('tjpg'),$('tshr'),function(){
   var ts=teachTests();
-  return {file:'mesues '+curT,big:nice(curT),sub:SUBT,rows:ts.map(function(t){var d=dayObj(t.d);return {d:d.w3+' '+d.n+' '+d.m.slice(0,3),s:t.c+' · '+t.s,h:hrs(t.h)};})};
+  return {file:'mesues '+curT,big:disp(curT),sub:SUBT,rows:ts.map(function(t){var d=dayObj(t.d);return {d:d.w3+' '+d.n+' '+d.m.slice(0,3),s:t.c+' · '+t.s,h:hrs(t.h)};})};
 });
 
 /* ---- Sipas ditës ---- */
